@@ -1,2 +1,2 @@
-// Shared TypeScript types and interfaces export
-export {};
+export * from "./customer";
+

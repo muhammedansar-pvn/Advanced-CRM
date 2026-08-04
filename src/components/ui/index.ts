@@ -1,2 +1,8 @@
 export * from "./card";
+export * from "./table";
+export * from "./badge";
+export * from "./button";
+export * from "./avatar";
+export * from "./input";
+export * from "./dropdown-menu";
 

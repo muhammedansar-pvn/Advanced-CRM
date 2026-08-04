@@ -1,2 +1,2 @@
-// Mock data and static content export
-export {};
+export * from "./mock-customers";
+
