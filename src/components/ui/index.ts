@@ -1,2 +1,2 @@
-// UI primitives export
-export {};
+export * from "./card";
+
