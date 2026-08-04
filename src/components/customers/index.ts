@@ -4,4 +4,10 @@ export * from "./customer-search";
 export * from "./customer-pagination";
 export * from "./customer-row";
 export * from "./customer-table";
+export * from "./CustomerForm";
+export * from "./CustomerFormDialog";
+export * from "./CustomerDetailsDialog";
+export * from "./DeleteCustomerDialog";
+export * from "./CustomerToolbar";
+
 

@@ -7,5 +7,7 @@ export * from "./input";
 export * from "./dropdown-menu";
 export * from "./checkbox";
 export * from "./sheet";
+export * from "./dialog";
+
 
 

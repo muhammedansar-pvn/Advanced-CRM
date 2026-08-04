@@ -10,11 +10,17 @@ import { Building2, Mail, Phone, Calendar } from "lucide-react";
 interface CustomerRowProps {
   customer: Customer;
   layout: "table" | "card";
+  onView: (customer: Customer) => void;
+  onEdit: (customer: Customer) => void;
+  onDelete: (customer: Customer) => void;
 }
 
 export const CustomerRow = React.memo(function CustomerRow({
   customer,
   layout,
+  onView,
+  onEdit,
+  onDelete,
 }: CustomerRowProps) {
   // Format Date for premium display: e.g., "Aug 1, 2026"
   const formatDate = React.useCallback((dateString: string) => {
@@ -39,6 +45,10 @@ export const CustomerRow = React.memo(function CustomerRow({
       .toUpperCase();
   }, [customer.name]);
 
+  const handleView = React.useCallback(() => onView(customer), [customer, onView]);
+  const handleEdit = React.useCallback(() => onEdit(customer), [customer, onEdit]);
+  const handleDelete = React.useCallback(() => onDelete(customer), [customer, onDelete]);
+
   if (layout === "card") {
     return (
       <Card className="overflow-hidden border-muted/60 relative group">
@@ -62,7 +72,12 @@ export const CustomerRow = React.memo(function CustomerRow({
                 </div>
               </div>
             </div>
-            <CustomerActions customerId={customer.id} />
+            <CustomerActions
+              customerId={customer.id}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
           </div>
 
           {/* Details list */}
@@ -112,7 +127,12 @@ export const CustomerRow = React.memo(function CustomerRow({
       </TableCell>
       <TableCell className="text-muted-foreground">{formatDate(customer.lastContact)}</TableCell>
       <TableCell className="text-right">
-        <CustomerActions customerId={customer.id} />
+        <CustomerActions
+          customerId={customer.id}
+          onView={handleView}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
       </TableCell>
     </TableRow>
   );
