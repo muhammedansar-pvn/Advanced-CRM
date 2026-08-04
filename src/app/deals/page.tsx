@@ -83,7 +83,7 @@ export default function DealsPage() {
               <DollarSign className="h-4 w-4 text-blue-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${totalPipeline.toLocaleString()}</div>
+              <div className="text-2xl font-bold">${totalPipeline.toLocaleString("en-US")}</div>
               <p className="text-xs text-muted-foreground mt-1">Across all active & won deals</p>
             </CardContent>
           </Card>
@@ -97,7 +97,7 @@ export default function DealsPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-                ${wonValue.toLocaleString()}
+                ${wonValue.toLocaleString("en-US")}
               </div>
               <p className="text-xs text-muted-foreground mt-1">Realized revenue to date</p>
             </CardContent>
@@ -176,7 +176,7 @@ export default function DealsPage() {
                     <span className="text-xs text-muted-foreground font-medium">({stageDeals.length})</span>
                   </div>
                   <span className="text-xs font-bold text-muted-foreground">
-                    ${stageTotal.toLocaleString()}
+                    ${stageTotal.toLocaleString("en-US")}
                   </span>
                 </div>
 
@@ -192,7 +192,7 @@ export default function DealsPage() {
                           <div className="flex justify-between items-start">
                             <h3 className="font-semibold text-sm line-clamp-1">{deal.title}</h3>
                             <span className="text-sm font-bold text-primary">
-                              ${deal.value.toLocaleString()}
+                              ${deal.value.toLocaleString("en-US")}
                             </span>
                           </div>
 
