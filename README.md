@@ -145,26 +145,6 @@ npm run build
 
 ---
 
-# 📸 Screenshots
-
-## Dashboard
-
-> Add a screenshot here
-
-## Customer Management
-
-> Add a screenshot here
-
-## Advanced Filters
-
-> Add a screenshot here
-
-## Drag & Drop
-
-> Add a screenshot here
-
----
-
 # 📌 Assignment Highlights
 
 - ✅ Next.js App Router
