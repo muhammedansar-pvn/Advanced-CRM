@@ -1,20 +1,23 @@
 "use client";
 
+import { useState } from "react";
 import { DashboardLayout } from "@/components/layout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { toast } from "sonner";
 import {
   BarChart3,
   TrendingUp,
   Download,
-  DollarSign,
   Target,
   Users,
   Award,
   ArrowUpRight,
-  ChevronRight
+  Loader2,
 } from "lucide-react";
 
 export default function ReportsPage() {
+  const [isExporting, setIsExporting] = useState(false);
+
   const conversionFunnel = [
     { stage: "Leads Generated", count: 240, percentage: "100%", color: "bg-blue-500" },
     { stage: "Qualified Leads", count: 168, percentage: "70%", color: "bg-indigo-500" },
@@ -29,27 +32,112 @@ export default function ReportsPage() {
     { name: "Alex Johnson", deals: 9, revenue: "₹1,55,000", winRate: "55%" },
   ];
 
+  const monthlyRevenue = [
+    { month: "May 2026", amount: "₹1,20,000", pct: 60 },
+    { month: "Jun 2026", amount: "₹1,65,000", pct: 78 },
+    { month: "Jul 2026", amount: "₹1,90,000", pct: 90 },
+    { month: "Aug 2026 (P)", amount: "₹2,10,000", pct: 95 },
+  ];
+
+  const handleExportReport = async () => {
+    setIsExporting(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      const today = new Date().toISOString().split("T")[0];
+
+      function escapeCsv(val: string | number) {
+        const str = String(val);
+        if (/[",\n\r]/.test(str)) {
+          return `"${str.replace(/"/g, '""')}"`;
+        }
+        return `"${str}"`;
+      }
+
+      const csvLines: string[] = [
+        "=== CRM PERFORMANCE & ANALYTICS REPORT ===",
+        `Generated Date,${today}`,
+        "",
+        "--- KEY PERFORMANCE METRICS ---",
+        "Metric,Value,Status / Note",
+        `Q3 Revenue Target,${escapeCsv("₹5,50,000")},82% achieved`,
+        "Avg Sales Cycle,24 Days,-3 days faster than Q2",
+        "Conversion Rate,15.8%,+2.4% from overall average",
+        "Top Lead Source,Inbound Web,42% of total pipeline deals",
+        "",
+        "--- SALES CONVERSION FUNNEL ---",
+        "Stage,Count,Conversion Percentage",
+        ...conversionFunnel.map(
+          (f) => `${escapeCsv(f.stage)},${f.count},${escapeCsv(f.percentage)}`
+        ),
+        "",
+        "--- MONTHLY REVENUE TREND ---",
+        "Month,Revenue Amount",
+        ...monthlyRevenue.map((m) => `${escapeCsv(m.month)},${escapeCsv(m.amount)}`),
+        "",
+        "--- TOP PERFORMING SALES REPRESENTATIVES ---",
+        "Rank,Representative Name,Deals Closed,Revenue Generated,Win Rate",
+        ...topPerformers.map(
+          (rep, idx) =>
+            `#${idx + 1},${escapeCsv(rep.name)},${rep.deals},${escapeCsv(rep.revenue)},${escapeCsv(
+              rep.winRate
+            )}`
+        ),
+      ];
+
+      const csvContent = "\uFEFF" + csvLines.join("\r\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+
+      const filename = `crm-analytics-report-${today}.csv`;
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      toast.success("Analytics report exported to CSV successfully!");
+    } catch {
+      toast.error("Failed to export analytics report. Please try again.");
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-8">
-
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Reports & Analytics</h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-muted-foreground mt-1 text-sm">
               Performance metrics, sales conversion funnels, and revenue insights.
             </p>
           </div>
-          <button className="inline-flex items-center justify-center space-x-2 rounded-lg border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm hover:bg-accent transition-colors">
-            <Download className="h-4 w-4" />
-            <span>Export Report</span>
+          <button
+            type="button"
+            onClick={handleExportReport}
+            disabled={isExporting}
+            className="inline-flex items-center justify-center space-x-2 rounded-lg border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm hover:bg-accent transition-colors disabled:opacity-50"
+            aria-label="Export analytics report to CSV"
+          >
+            {isExporting ? (
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+            ) : (
+              <Download className="h-4 w-4" aria-hidden="true" />
+            )}
+            <span>{isExporting ? "Exporting..." : "Export Report"}</span>
           </button>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <Card className="border-muted/60">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Q3 Revenue Target</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Q3 Revenue Target
+              </CardTitle>
               <Target className="h-4 w-4 text-emerald-500" />
             </CardHeader>
             <CardContent>
@@ -63,7 +151,9 @@ export default function ReportsPage() {
 
           <Card className="border-muted/60">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Avg Sales Cycle</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Avg Sales Cycle
+              </CardTitle>
               <TrendingUp className="h-4 w-4 text-blue-500" />
             </CardHeader>
             <CardContent>
@@ -74,7 +164,9 @@ export default function ReportsPage() {
 
           <Card className="border-muted/60">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Conversion Rate</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Conversion Rate
+              </CardTitle>
               <BarChart3 className="h-4 w-4 text-violet-500" />
             </CardHeader>
             <CardContent>
@@ -85,7 +177,9 @@ export default function ReportsPage() {
 
           <Card className="border-muted/60">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Top Lead Source</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Top Lead Source
+              </CardTitle>
               <Users className="h-4 w-4 text-amber-500" />
             </CardHeader>
             <CardContent>
@@ -96,7 +190,6 @@ export default function ReportsPage() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
-
           <Card className="border-muted/60">
             <CardHeader>
               <CardTitle className="text-lg font-bold">Sales Conversion Funnel</CardTitle>
@@ -107,7 +200,9 @@ export default function ReportsPage() {
                 <div key={index} className="space-y-1.5">
                   <div className="flex justify-between text-xs font-medium">
                     <span>{item.stage}</span>
-                    <span className="text-muted-foreground">{item.count} ({item.percentage})</span>
+                    <span className="text-muted-foreground">
+                      {item.count} ({item.percentage})
+                    </span>
                   </div>
                   <div className="h-3 w-full rounded-full bg-muted overflow-hidden">
                     <div
@@ -126,12 +221,7 @@ export default function ReportsPage() {
               <CardDescription>Completed revenue per month vs projections</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {[
-                { month: "May 2026", amount: "₹1,20,000", pct: 60 },
-                { month: "Jun 2026", amount: "₹1,65,000", pct: 78 },
-                { month: "Jul 2026", amount: "₹1,90,000", pct: 90 },
-                { month: "Aug 2026 (P)", amount: "₹2,10,000", pct: 95 },
-              ].map((m, idx) => (
+              {monthlyRevenue.map((m, idx) => (
                 <div key={idx} className="space-y-2">
                   <div className="flex justify-between items-center text-sm font-medium">
                     <span>{m.month}</span>
@@ -156,7 +246,9 @@ export default function ReportsPage() {
                 <Award className="h-5 w-5 text-yellow-500" />
                 <span>Top Performing Sales Representatives</span>
               </CardTitle>
-              <CardDescription className="mt-1">Ranked by closed won value this quarter</CardDescription>
+              <CardDescription className="mt-1">
+                Ranked by closed won value this quarter
+              </CardDescription>
             </div>
           </CardHeader>
           <CardContent>
