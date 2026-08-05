@@ -28,7 +28,7 @@ export const SortableCustomerCard = React.memo(function SortableCustomerCard({
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1,
+    opacity: isDragging ? 0.45 : 1,
     zIndex: isDragging ? 10 : undefined,
   };
 
@@ -61,26 +61,31 @@ export const SortableCustomerCard = React.memo(function SortableCustomerCard({
 
   return (
     <div ref={setNodeRef} style={style}>
-      <Card className={`overflow-hidden border-muted/60 relative group transition-shadow ${isDragging ? "shadow-lg border-primary/30" : ""}`}>
-        <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-primary to-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <Card
+        className={`card-hover overflow-hidden border-muted/60 relative group cursor-default ${
+          isDragging ? "shadow-lg border-primary/30" : ""
+        }`}
+      >
+        {/* Accent bar on hover */}
+        <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-primary to-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
         <CardContent className="p-5">
-
+          {/* Header row */}
           <div className="flex items-start justify-between mb-4">
-
             <div className="flex items-center space-x-2">
-
+              {/* Drag handle */}
               <button
                 type="button"
-                className="cursor-grab active:cursor-grabbing touch-none text-muted-foreground/40 hover:text-muted-foreground transition-colors p-0.5 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring self-start mt-0.5"
+                className="cursor-grab active:cursor-grabbing touch-none text-muted-foreground/30 hover:text-muted-foreground transition-colors duration-150 p-0.5 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring self-start mt-0.5"
                 aria-label={`Drag to reorder ${customer.name}`}
                 {...listeners}
                 {...attributes}
               >
-                <GripVertical className="h-4 w-4" />
+                <GripVertical className="h-4 w-4" aria-hidden="true" />
               </button>
 
               <div className="flex items-center space-x-3">
-                <Avatar className="h-10 w-10 border shadow-sm">
+                <Avatar className="h-10 w-10 border shadow-sm transition-shadow duration-200 group-hover:shadow-md">
                   <AvatarImage src={customer.avatar} alt={customer.name} />
                   <AvatarFallback className="bg-primary/5 text-primary text-xs font-bold">
                     {initials}
@@ -105,23 +110,24 @@ export const SortableCustomerCard = React.memo(function SortableCustomerCard({
             />
           </div>
 
+          {/* Details */}
           <div className="space-y-2.5 text-xs text-muted-foreground border-t pt-3.5">
             <div className="flex items-center space-x-2">
-              <Building2 className="h-3.5 w-3.5 shrink-0 text-muted-foreground/80" />
+              <Building2 className="h-3.5 w-3.5 shrink-0 text-muted-foreground/70" aria-hidden="true" />
               <span className="truncate text-foreground font-medium">{customer.company}</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Mail className="h-3.5 w-3.5 shrink-0 text-muted-foreground/80" />
+              <Mail className="h-3.5 w-3.5 shrink-0 text-muted-foreground/70" aria-hidden="true" />
               <span className="truncate">{customer.email}</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Phone className="h-3.5 w-3.5 shrink-0 text-muted-foreground/80" />
+              <Phone className="h-3.5 w-3.5 shrink-0 text-muted-foreground/70" aria-hidden="true" />
               <span>{customer.phone}</span>
             </div>
-            <div className="flex items-center justify-between mt-1 text-[11px] bg-muted/40 rounded px-2.5 py-1.5 border border-muted/50">
+            <div className="flex items-center justify-between mt-1 text-[11px] bg-muted/40 rounded-lg px-2.5 py-1.5 border border-muted/50">
               <span className="flex items-center text-muted-foreground">
-                <Calendar className="h-3 w-3 mr-1 text-muted-foreground/85" />
-                Last Contact:
+                <Calendar className="h-3 w-3 mr-1 text-muted-foreground/70" aria-hidden="true" />
+                Last Contact
               </span>
               <span className="font-semibold text-foreground">{formattedDate}</span>
             </div>

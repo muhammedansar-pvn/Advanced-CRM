@@ -24,41 +24,54 @@ export const CustomerToolbar = React.memo(function CustomerToolbar({
   onFilterToggle,
 }: CustomerToolbarProps) {
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-card border rounded-xl p-4 shadow-sm">
-
-      <div className="w-full sm:flex-1">
+    <div
+      className="flex flex-col sm:flex-row sm:items-center gap-3 bg-card border rounded-xl px-4 py-3 shadow-sm"
+      role="toolbar"
+      aria-label="Customer list controls"
+    >
+      {/* Search — full width on mobile, flex-1 on desktop */}
+      <div className="w-full sm:flex-1 sm:max-w-sm">
         <CustomerSearch value={searchQuery} onChange={onSearchChange} />
       </div>
 
-      <div className="flex items-center space-x-2.5 w-full sm:w-auto justify-between sm:justify-end">
-
+      {/* Actions row */}
+      <div className="flex items-center gap-2 justify-between sm:justify-end">
+        {/* Filters button */}
         <Button
           variant="outline"
           onClick={onFilterToggle}
-          className="flex items-center space-x-1.5 text-xs font-semibold hover:bg-accent shrink-0 h-9"
+          className="flex items-center gap-1.5 text-xs font-semibold h-9 hover:bg-accent transition-colors duration-150"
           aria-label={`Open filter options${activeFilterCount > 0 ? `, ${activeFilterCount} active` : ""}`}
+          aria-pressed={activeFilterCount > 0}
         >
-          <SlidersHorizontal className="h-4 w-4" />
+          <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden="true" />
           <span>Filters</span>
-          <ActiveFilterCount count={activeFilterCount} />
+          {activeFilterCount > 0 && (
+            <ActiveFilterCount count={activeFilterCount} />
+          )}
         </Button>
 
-        <div className="flex items-center space-x-2">
-
-          <div className="hidden sm:flex items-center space-x-1.5 text-xs font-semibold text-muted-foreground bg-muted/30 px-3 py-1.5 border rounded-lg h-9">
-            <Users className="h-3.5 w-3.5 text-primary" />
-            <span>Showing {filteredCount} of {totalCount}</span>
-          </div>
-
-          <Button
-            onClick={onAddClick}
-            className="flex items-center space-x-1.5 text-xs font-bold shrink-0 h-9 bg-primary text-primary-foreground hover:bg-primary/95 shadow-sm"
-            aria-label="Add a new customer profile"
-          >
-            <Plus className="h-4 w-4 stroke-[3]" />
-            <span>Add Customer</span>
-          </Button>
+        {/* Count pill — hidden on smallest screens */}
+        <div
+          className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-muted-foreground bg-muted/30 px-3 py-1.5 border rounded-lg h-9 select-none"
+          aria-live="polite"
+          aria-label={`Showing ${filteredCount} of ${totalCount} customers`}
+        >
+          <Users className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
+          <span>
+            {filteredCount} <span className="text-muted-foreground/60">/ {totalCount}</span>
+          </span>
         </div>
+
+        {/* Add Customer */}
+        <Button
+          onClick={onAddClick}
+          className="flex items-center gap-1.5 text-xs font-bold h-9 shadow-sm transition-all duration-150 hover:shadow-md"
+          aria-label="Add a new customer"
+        >
+          <Plus className="h-4 w-4 stroke-[3]" aria-hidden="true" />
+          <span>Add Customer</span>
+        </Button>
       </div>
     </div>
   );

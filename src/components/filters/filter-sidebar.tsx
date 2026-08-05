@@ -15,7 +15,7 @@ import { DateRangeFilter } from "./date-range-filter";
 import { SavedFilters } from "./saved-filters";
 import { FilterActions } from "./filter-actions";
 import { CustomerFilters, SavedFilterConfig } from "@/types";
-import { Trash2, Filter } from "lucide-react";
+import { Trash2, SlidersHorizontal } from "lucide-react";
 
 interface FilterSidebarProps {
   filters: CustomerFilters;
@@ -75,39 +75,49 @@ export const FilterSidebar = React.memo(function FilterSidebar({
     <Sheet open={isOpen} onOpenChange={handleOpenChange}>
       <SheetContent
         side="right"
-        className="w-[320px] sm:w-[380px] flex flex-col p-0 overflow-hidden"
+        className="w-[320px] sm:w-[380px] flex flex-col p-0 overflow-hidden gap-0"
         aria-label="Advanced filters panel"
       >
-
+        {/* Header */}
         <SheetHeader className="px-5 pt-5 pb-4 border-b shrink-0">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Filter className="h-4 w-4 text-primary" />
+            <div className="flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/8 border border-primary/12">
+                <SlidersHorizontal className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
+              </div>
               <SheetTitle className="text-sm font-semibold text-foreground">
                 Advanced Filters
               </SheetTitle>
+              {activeFilterCount > 0 && (
+                <span className="inline-flex items-center justify-center h-5 min-w-5 px-1.5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold">
+                  {activeFilterCount}
+                </span>
+              )}
             </div>
             {activeFilterCount > 0 && (
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={resetFilters}
-                className="h-7 px-2 text-xs font-semibold text-destructive hover:bg-destructive/10 hover:text-destructive flex items-center space-x-1"
+                className="h-7 px-2 text-xs font-semibold text-destructive hover:bg-destructive/10 hover:text-destructive flex items-center gap-1"
+                aria-label="Clear all filters"
               >
-                <Trash2 className="h-3.5 w-3.5" />
-                <span>Clear All</span>
+                <Trash2 className="h-3 w-3" aria-hidden="true" />
+                <span>Clear all</span>
               </Button>
             )}
           </div>
-          <SheetDescription className="text-xs text-muted-foreground text-left">
+          <SheetDescription className="text-xs text-muted-foreground text-left mt-1">
             Narrow your customer list using the options below.
           </SheetDescription>
         </SheetHeader>
 
+        {/* Scrollable body */}
         <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6">
-
+          {/* Quick presets */}
           <FilterActions onApplyPreset={applyPreset} />
 
+          {/* Filter fields */}
           <div className="space-y-5">
             <StatusFilter
               selectedStatus={filters.status}
@@ -132,6 +142,7 @@ export const FilterSidebar = React.memo(function FilterSidebar({
             />
           </div>
 
+          {/* Saved filters */}
           <SavedFilters
             savedFilters={savedFilters}
             onSave={saveCurrentFilter}

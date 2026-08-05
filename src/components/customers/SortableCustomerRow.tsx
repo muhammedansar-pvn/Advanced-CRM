@@ -27,7 +27,7 @@ export const SortableCustomerRow = React.memo(function SortableCustomerRow({
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : 1,
+    opacity: isDragging ? 0.45 : 1,
     zIndex: isDragging ? 10 : undefined,
     position: isDragging ? "relative" : undefined,
   };
@@ -60,21 +60,38 @@ export const SortableCustomerRow = React.memo(function SortableCustomerRow({
   const handleDelete = React.useCallback(() => onDelete(customer), [customer, onDelete]);
 
   return (
-    <TableRow ref={setNodeRef} style={style} className={`group ${isDragging ? "bg-muted/60 shadow-md" : ""}`}>
-
+    <TableRow
+      ref={setNodeRef}
+      style={style}
+      className={`group transition-colors duration-150 hover:bg-muted/30 ${isDragging ? "bg-muted/60 shadow-md" : ""}`}
+    >
       <TableCell className="w-[36px] pr-0 pl-3">
         <button
           type="button"
-          className="cursor-grab active:cursor-grabbing touch-none text-muted-foreground/40 hover:text-muted-foreground transition-colors p-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="cursor-grab active:cursor-grabbing touch-none text-muted-foreground/30 hover:text-muted-foreground transition-colors duration-150 p-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           aria-label={`Drag to reorder ${customer.name}`}
           {...listeners}
           {...attributes}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="9" cy="5" r="1" /><circle cx="9" cy="12" r="1" /><circle cx="9" cy="19" r="1" />
+            <circle cx="15" cy="5" r="1" /><circle cx="15" cy="12" r="1" /><circle cx="15" cy="19" r="1" />
+          </svg>
         </button>
       </TableCell>
       <TableCell className="w-[80px]">
-        <Avatar className="h-9 w-9 border shadow-sm">
+        <Avatar className="h-9 w-9 border shadow-sm ring-0 group-hover:ring-2 group-hover:ring-primary/10 transition-all duration-150">
           <AvatarImage src={customer.avatar} alt={customer.name} />
           <AvatarFallback className="bg-primary/5 text-primary text-[11px] font-bold">
             {initials}
@@ -82,14 +99,14 @@ export const SortableCustomerRow = React.memo(function SortableCustomerRow({
         </Avatar>
       </TableCell>
       <TableCell className="font-semibold text-foreground">{customer.name}</TableCell>
-      <TableCell className="text-muted-foreground">{customer.email}</TableCell>
-      <TableCell className="text-muted-foreground whitespace-nowrap">{customer.phone}</TableCell>
-      <TableCell className="font-medium text-foreground">{customer.company}</TableCell>
+      <TableCell className="text-muted-foreground text-sm">{customer.email}</TableCell>
+      <TableCell className="text-muted-foreground whitespace-nowrap text-sm">{customer.phone}</TableCell>
+      <TableCell className="font-medium text-foreground text-sm">{customer.company}</TableCell>
       <TableCell>
         <CustomerStatusBadge status={customer.status} />
       </TableCell>
-      <TableCell className="text-muted-foreground">{formattedDate}</TableCell>
-      <TableCell className="text-right">
+      <TableCell className="text-muted-foreground text-sm">{formattedDate}</TableCell>
+      <TableCell className="text-right pr-4">
         <CustomerActions
           customerId={customer.id}
           onView={handleView}

@@ -57,3 +57,108 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ============================================================
+   SHIMMER SKELETON ANIMATION
+   ============================================================ */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 25%,
+    hsl(var(--muted) / 0.5) 50%,
+    hsl(var(--muted)) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+/* ============================================================
+   SMOOTH PAGE TRANSITIONS
+   ============================================================ */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-slide-in {
+  animation: fadeSlideIn 0.22s ease-out both;
+}
+
+/* ============================================================
+   TABLE ROW HOVER POLISH
+   ============================================================ */
+tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+/* ============================================================
+   CARD HOVER ELEVATION
+   ============================================================ */
+.card-hover {
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.card-hover:hover {
+  box-shadow: 0 4px 16px -2px rgb(0 0 0 / 0.08), 0 2px 6px -1px rgb(0 0 0 / 0.04);
+  transform: translateY(-1px);
+  border-color: hsl(var(--border));
+}
+
+/* ============================================================
+   FOCUS RING POLISH
+   ============================================================ */
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   SCROLLBAR POLISH
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.4);
+}
+
+/* ============================================================
+   BUTTON PRESS FEEDBACK
+   ============================================================ */
+button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* ============================================================
+   DIALOG / SHEET OVERLAY POLISH
+   ============================================================ */
+[data-radix-dialog-overlay],
+[data-radix-alert-dialog-overlay] {
+  backdrop-filter: blur(2px);
+}

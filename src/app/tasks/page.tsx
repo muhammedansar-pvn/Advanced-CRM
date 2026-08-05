@@ -5,6 +5,8 @@ import { DashboardLayout } from "@/components/layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MOCK_TASKS } from "@/data/mock-tasks";
 import { Task, TaskPriority, TaskStatus } from "@/types/tasks";
+import { TaskFormDialog } from "@/components/tasks/TaskFormDialog";
+import { toast } from "sonner";
 import {
   CheckSquare,
   Plus,
@@ -22,6 +24,16 @@ export default function TasksPage() {
   const [tasks, setTasks] = useState<Task[]>(MOCK_TASKS);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | TaskStatus>("all");
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  const handleAddTask = (newTaskData: Omit<Task, "id">) => {
+    const newTask: Task = {
+      ...newTaskData,
+      id: `task-${Date.now()}`,
+    };
+    setTasks((prev) => [newTask, ...prev]);
+    toast.success("New task created successfully!");
+  };
 
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch =
@@ -80,7 +92,10 @@ export default function TasksPage() {
               Organize sales follow-ups, client meetings, and team action items.
             </p>
           </div>
-          <button className="inline-flex items-center justify-center space-x-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 transition-colors">
+          <button
+            onClick={() => setIsAddModalOpen(true)}
+            className="inline-flex items-center justify-center space-x-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 transition-colors"
+          >
             <Plus className="h-4 w-4" />
             <span>Create Task</span>
           </button>
@@ -248,6 +263,12 @@ export default function TasksPage() {
           )}
         </div>
       </div>
+
+      <TaskFormDialog
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSubmit={handleAddTask}
+      />
     </DashboardLayout>
   );
 }

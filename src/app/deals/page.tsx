@@ -5,6 +5,8 @@ import { DashboardLayout } from "@/components/layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MOCK_DEALS } from "@/data/mock-deals";
 import { Deal, DealStage } from "@/types/deals";
+import { DealFormDialog } from "@/components/deals/DealFormDialog";
+import { toast } from "sonner";
 import {
   DollarSign,
   Plus,
@@ -32,6 +34,17 @@ export default function DealsPage() {
   const [deals, setDeals] = useState<Deal[]>(MOCK_DEALS);
   const [searchQuery, setSearchQuery] = useState("");
   const [stageFilter, setStageFilter] = useState<string>("all");
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  const handleAddDeal = (newDealData: Omit<Deal, "id" | "createdAt">) => {
+    const newDeal: Deal = {
+      ...newDealData,
+      id: `deal-${Date.now()}`,
+      createdAt: new Date().toISOString().split("T")[0],
+    };
+    setDeals((prev) => [newDeal, ...prev]);
+    toast.success("New deal created successfully!");
+  };
 
   const filteredDeals = deals.filter((deal) => {
     const matchesSearch =
@@ -67,7 +80,10 @@ export default function DealsPage() {
               Track and manage sales opportunities through each pipeline stage.
             </p>
           </div>
-          <button className="inline-flex items-center justify-center space-x-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 transition-colors">
+          <button
+            onClick={() => setIsAddModalOpen(true)}
+            className="inline-flex items-center justify-center space-x-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 transition-colors"
+          >
             <Plus className="h-4 w-4" />
             <span>New Deal</span>
           </button>
@@ -234,6 +250,12 @@ export default function DealsPage() {
           })}
         </div>
       </div>
+
+      <DealFormDialog
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSubmit={handleAddDeal}
+      />
     </DashboardLayout>
   );
 }

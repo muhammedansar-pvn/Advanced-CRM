@@ -10,7 +10,7 @@ import {
   BarChart3,
   Settings,
   X,
-  Sparkles
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -33,25 +33,32 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   return (
     <>
-
+      {/* Mobile backdrop */}
       {isOpen && (
         <div
           className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden"
           onClick={onClose}
+          aria-hidden="true"
         />
       )}
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r bg-card text-card-foreground transition-transform duration-300 ease-in-out lg:static lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r bg-card text-card-foreground",
+          "transition-transform duration-300 ease-in-out lg:static lg:translate-x-0",
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
+        role="navigation"
+        aria-label="Main navigation"
       >
-
+        {/* Logo */}
         <div className="flex h-16 items-center justify-between px-6 border-b">
-          <Link href="/" className="flex items-center space-x-2 font-bold text-xl tracking-tight">
+          <Link
+            href="/"
+            className="flex items-center gap-2 font-bold text-xl tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
+          >
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-md shadow-primary/20">
-              <Sparkles className="h-5 w-5 text-yellow-400" />
+              <Sparkles className="h-5 w-5 text-yellow-400" aria-hidden="true" />
             </div>
             <span className="bg-gradient-to-r from-foreground to-foreground/75 bg-clip-text text-transparent">
               ApexCRM
@@ -59,14 +66,15 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           </Link>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-md border lg:hidden hover:bg-accent"
-            aria-label="Close sidebar"
+            className="flex h-8 w-8 items-center justify-center rounded-md border lg:hidden hover:bg-accent transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            aria-label="Close navigation"
           >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
 
-        <nav className="flex-1 space-y-1.5 px-4 py-6 overflow-y-auto">
+        {/* Nav links */}
+        <nav className="flex-1 space-y-1 px-3 py-5 overflow-y-auto">
           {sidebarItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -75,31 +83,40 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               <Link
                 key={item.name}
                 href={item.href}
+                onClick={() => onClose()}
                 className={cn(
-                  "flex items-center space-x-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 group relative",
+                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium",
+                  "transition-all duration-150 relative group",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   isActive
                     ? "bg-primary text-primary-foreground shadow-sm shadow-primary/10"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 )}
+                aria-current={isActive ? "page" : undefined}
               >
                 <Icon
                   className={cn(
-                    "h-4 w-4",
+                    "h-4 w-4 shrink-0 transition-transform duration-150 group-hover:scale-110",
                     isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground"
                   )}
+                  aria-hidden="true"
                 />
                 <span>{item.name}</span>
                 {isActive && (
-                  <span className="absolute right-3 h-1.5 w-1.5 rounded-full bg-primary-foreground" />
+                  <span className="absolute right-3 h-1.5 w-1.5 rounded-full bg-primary-foreground/70" aria-hidden="true" />
                 )}
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 border-t bg-muted/30">
-          <div className="flex items-center space-x-3 rounded-lg p-2 hover:bg-accent cursor-pointer transition-colors duration-200">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-sm">
+        {/* User footer */}
+        <div className="p-3 border-t bg-muted/20">
+          <div className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-accent cursor-pointer transition-colors duration-150">
+            <div
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-sm"
+              aria-hidden="true"
+            >
               JD
             </div>
             <div className="flex-1 overflow-hidden">
