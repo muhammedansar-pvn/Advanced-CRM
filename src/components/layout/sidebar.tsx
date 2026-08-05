@@ -51,7 +51,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         <div className="flex h-16 items-center justify-between px-6 border-b">
           <Link href="/" className="flex items-center space-x-2 font-bold text-xl tracking-tight">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-md shadow-primary/20">
-              <Sparkles className="h-5 w-5 animate-pulse text-yellow-400" />
+              <Sparkles className="h-5 w-5 text-yellow-400" />
             </div>
             <span className="bg-gradient-to-r from-foreground to-foreground/75 bg-clip-text text-transparent">
               ApexCRM
@@ -84,13 +84,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               >
                 <Icon
                   className={cn(
-                    "h-4 w-4 transition-transform duration-200 group-hover:scale-110",
+                    "h-4 w-4",
                     isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground"
                   )}
                 />
                 <span>{item.name}</span>
                 {isActive && (
-                  <span className="absolute right-3 h-1.5 w-1.5 rounded-full bg-primary-foreground animate-ping" />
+                  <span className="absolute right-3 h-1.5 w-1.5 rounded-full bg-primary-foreground" />
                 )}
               </Link>
             );

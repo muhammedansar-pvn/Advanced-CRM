@@ -251,7 +251,7 @@ export function CustomerTable() {
     (key: SortKey) => {
       if (sortKey !== key) {
         return (
-          <ArrowUpDown className="ml-2 h-3.5 w-3.5 text-muted-foreground/60 transition-transform group-hover:scale-105" />
+          <ArrowUpDown className="ml-2 h-3.5 w-3.5 text-muted-foreground/60" />
         );
       }
       return sortDirection === "asc" ? (
@@ -353,7 +353,7 @@ export function CustomerTable() {
           {isQueryError ? (
 
             <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-              <AlertCircle className="h-10 w-10 text-destructive mb-3 animate-bounce" />
+              <AlertCircle className="h-10 w-10 text-destructive mb-3" />
               <h3 className="font-semibold text-base text-foreground">Failed to load customers</h3>
               <p className="text-xs text-muted-foreground mt-1 max-w-[280px] leading-relaxed font-medium">
                 There was an error communicating with the local mock database.

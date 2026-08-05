@@ -46,7 +46,7 @@ export const CustomerToolbar = React.memo(function CustomerToolbar({
         <div className="flex items-center space-x-2">
 
           <div className="hidden sm:flex items-center space-x-1.5 text-xs font-semibold text-muted-foreground bg-muted/30 px-3 py-1.5 border rounded-lg h-9">
-            <Users className="h-3.5 w-3.5 text-primary animate-pulse" />
+            <Users className="h-3.5 w-3.5 text-primary" />
             <span>Showing {filteredCount} of {totalCount}</span>
           </div>
 

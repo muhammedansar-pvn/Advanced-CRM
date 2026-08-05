@@ -60,7 +60,7 @@ export default function Home() {
           </p>
         </div>
         <div className="flex items-center space-x-2 bg-card border rounded-lg px-4 py-2 text-sm text-muted-foreground font-medium shadow-sm">
-          <Activity className="h-4 w-4 text-primary animate-pulse" />
+          <Activity className="h-4 w-4 text-primary" />
           <span>System status: Normal</span>
         </div>
       </div>

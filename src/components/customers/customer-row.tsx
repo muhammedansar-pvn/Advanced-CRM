@@ -109,7 +109,7 @@ export const CustomerRow = React.memo(function CustomerRow({
   return (
     <TableRow className="group">
       <TableCell className="w-[80px]">
-        <Avatar className="h-9 w-9 border shadow-sm group-hover:scale-105 transition-transform duration-200">
+        <Avatar className="h-9 w-9 border shadow-sm">
           <AvatarImage src={customer.avatar} alt={customer.name} />
           <AvatarFallback className="bg-primary/5 text-primary text-[11px] font-bold">
             {initials}

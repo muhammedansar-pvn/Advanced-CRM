@@ -41,7 +41,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
           aria-label="View notifications"
         >
           <Bell className="h-4 w-4" />
-          <span className="absolute right-2 top-2 flex h-2 w-2 rounded-full bg-destructive animate-pulse" />
+          <span className="absolute right-2 top-2 flex h-2 w-2 rounded-full bg-destructive" />
         </button>
 
         <div className="h-6 w-px bg-border hidden sm:block" />
