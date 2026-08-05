@@ -22,16 +22,18 @@ export const CustomerDetailsDialog = React.memo(function CustomerDetailsDialog({
   onClose,
   customer,
 }: CustomerDetailsDialogProps) {
-  if (!customer) return null;
+  const initials = React.useMemo(() => {
+    if (!customer) return "";
+    return customer.name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .substring(0, 2)
+      .toUpperCase();
+  }, [customer]);
 
-  const initials = customer.name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .substring(0, 2)
-    .toUpperCase();
-
-  const formattedDate = (() => {
+  const formattedDate = React.useMemo(() => {
+    if (!customer) return "";
     try {
       const date = new Date(customer.lastContact);
       if (isNaN(date.getTime())) return customer.lastContact;
@@ -43,7 +45,9 @@ export const CustomerDetailsDialog = React.memo(function CustomerDetailsDialog({
     } catch {
       return customer.lastContact;
     }
-  })();
+  }, [customer]);
+
+  if (!customer) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -52,7 +56,6 @@ export const CustomerDetailsDialog = React.memo(function CustomerDetailsDialog({
           <DialogTitle className="text-lg font-bold">Customer Details</DialogTitle>
         </DialogHeader>
 
-        {/* Profile Card Header */}
         <div className="flex items-center space-x-4 py-4">
           <Avatar className="h-14 w-14 border shadow-sm shrink-0">
             <AvatarImage src={customer.avatar} alt={customer.name} />
@@ -75,7 +78,6 @@ export const CustomerDetailsDialog = React.memo(function CustomerDetailsDialog({
           </div>
         </div>
 
-        {/* Contact Details List */}
         <div className="space-y-3.5 py-4 border-t border-b bg-muted/5 px-2 rounded-lg">
           <div className="flex items-center space-x-3 text-xs sm:text-sm">
             <Mail className="h-4 w-4 text-muted-foreground shrink-0" />
@@ -102,7 +104,6 @@ export const CustomerDetailsDialog = React.memo(function CustomerDetailsDialog({
           </div>
         </div>
 
-        {/* Notes Segment */}
         <div className="space-y-2 py-4">
           <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center">
             <Notebook className="h-3.5 w-3.5 mr-1.5 text-primary" />
@@ -113,7 +114,6 @@ export const CustomerDetailsDialog = React.memo(function CustomerDetailsDialog({
           </div>
         </div>
 
-        {/* Close Button footer */}
         <div className="flex justify-end pt-3">
           <Button onClick={onClose} className="text-xs px-5">
             Close

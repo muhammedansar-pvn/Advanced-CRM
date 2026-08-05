@@ -71,7 +71,7 @@ export const getPresetFilters = (): PresetFilter[] => {
       label: "High Value Customers",
       filters: {
         ...initialFilters,
-        // Placeholder rule
+
         status: ["active"],
       },
     },

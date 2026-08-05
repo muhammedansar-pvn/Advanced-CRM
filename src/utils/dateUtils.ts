@@ -29,7 +29,6 @@ export function formatDateRange(start: string, end: string): string {
 export function isDateWithinRange(dateString: string, start: string, end: string): boolean {
   if (!dateString) return false;
 
-  // Simple string date parsing comparison to avoid timezone shift issues (e.g. comparing "2026-08-01" to "2026-08-02")
   const itemDate = dateString.split("T")[0];
 
   if (start) {

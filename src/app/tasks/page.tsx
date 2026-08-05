@@ -72,7 +72,7 @@ export default function TasksPage() {
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Header */}
+
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Task Management</h1>
@@ -86,7 +86,6 @@ export default function TasksPage() {
           </button>
         </div>
 
-        {/* Task Metric Summary */}
         <div className="grid gap-4 md:grid-cols-3">
           <Card className="border-muted/60">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -122,7 +121,6 @@ export default function TasksPage() {
           </Card>
         </div>
 
-        {/* Controls & Filter Bar */}
         <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
           <div className="flex items-center space-x-1 border rounded-lg p-1 bg-muted/30">
             <button
@@ -175,7 +173,6 @@ export default function TasksPage() {
           </div>
         </div>
 
-        {/* Task List Container */}
         <div className="space-y-3">
           {filteredTasks.length === 0 ? (
             <div className="flex flex-col items-center justify-center p-12 rounded-xl border border-dashed text-center">

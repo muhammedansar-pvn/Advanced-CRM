@@ -31,16 +31,15 @@ export const CustomerPagination = React.memo(function CustomerPagination({
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 px-2 border-t">
-      {/* Range Display */}
+
       <div className="text-sm text-muted-foreground order-2 sm:order-1">
         Showing <span className="font-medium text-foreground">{fromIndex}</span> to{" "}
         <span className="font-medium text-foreground">{toIndex}</span> of{" "}
         <span className="font-medium text-foreground">{totalItems}</span> customers
       </div>
 
-      {/* Navigation Controls */}
       <div className="flex flex-row items-center space-x-6 order-1 sm:order-2">
-        {/* Page Size Select */}
+
         <div className="flex items-center space-x-2">
           <span className="text-sm text-muted-foreground whitespace-nowrap">Rows per page</span>
           <select
@@ -54,7 +53,6 @@ export const CustomerPagination = React.memo(function CustomerPagination({
           </select>
         </div>
 
-        {/* Page Indicators */}
         <div className="flex items-center space-x-3">
           <span className="text-sm font-medium">
             Page {currentPage} of {totalPages}

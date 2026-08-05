@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { mockCustomers } from "@/data";
+import { useCustomers } from "@/hooks";
 import { Search } from "lucide-react";
 
 interface CompanyFilterProps {
@@ -14,11 +14,12 @@ export const CompanyFilter = React.memo(function CompanyFilter({
   onChange,
 }: CompanyFilterProps) {
   const [searchTerm, setSearchTerm] = React.useState("");
+  const { data: customers = [] } = useCustomers();
 
   const allCompanies = React.useMemo(() => {
-    const names = mockCustomers.map((c) => c.company);
+    const names = customers.map((customer) => customer.company);
     return Array.from(new Set(names)).sort();
-  }, []);
+  }, [customers]);
 
   const filteredCompanies = React.useMemo(() => {
     if (!searchTerm.trim()) return allCompanies;

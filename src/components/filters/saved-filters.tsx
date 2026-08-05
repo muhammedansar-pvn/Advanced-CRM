@@ -55,7 +55,6 @@ export const SavedFilters = React.memo(function SavedFilters({
         Saved Filters
       </h4>
 
-      {/* Save Current Filters Bar */}
       <div className="flex items-center space-x-2">
         <Input
           type="text"
@@ -76,7 +75,6 @@ export const SavedFilters = React.memo(function SavedFilters({
         </Button>
       </div>
 
-      {/* Saved Filters list */}
       <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
         {savedFilters.length === 0 ? (
           <p className="text-xs text-muted-foreground italic py-1">No saved filter sets.</p>

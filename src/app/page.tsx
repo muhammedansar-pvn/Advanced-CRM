@@ -51,7 +51,7 @@ export default function Home() {
 
   return (
     <DashboardLayout>
-      {/* Header */}
+
       <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 mb-8">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
@@ -65,15 +65,14 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Cards Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
             <Card key={stat.title} className="overflow-hidden border-muted/60 relative group">
-              {/* Highlight bar */}
+
               <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-primary to-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
+
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   {stat.title}
@@ -105,7 +104,6 @@ export default function Home() {
         })}
       </div>
 
-      {/* Overview/Welcome Section */}
       <div className="mt-8 grid gap-6 md:grid-cols-3">
         <Card className="md:col-span-2 border-muted/60">
           <CardHeader>
@@ -116,7 +114,7 @@ export default function Home() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Welcome to the ApexCRM Dashboard. Here you can track your business pipeline, manage customer relations, and review detailed performance metrics. 
+              Welcome to the ApexCRM Dashboard. Here you can track your business pipeline, manage customer relations, and review detailed performance metrics.
             </p>
             <div className="p-4 rounded-xl bg-muted/40 border border-muted flex items-start space-x-3">
               <div className="rounded-lg bg-primary/10 p-2 text-primary">

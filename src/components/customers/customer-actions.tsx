@@ -55,4 +55,3 @@ export const CustomerActions = React.memo(function CustomerActions({
   );
 });
 CustomerActions.displayName = "CustomerActions";
-

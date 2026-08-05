@@ -11,7 +11,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
   return (
     <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b bg-background/95 px-6 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex flex-1 items-center space-x-4">
-        {/* Toggle Menu for Mobile */}
+
         <button
           onClick={onMenuClick}
           className="flex h-9 w-9 items-center justify-center rounded-lg border lg:hidden hover:bg-accent focus:outline-none"
@@ -20,7 +20,6 @@ export function Navbar({ onMenuClick }: NavbarProps) {
           <Menu className="h-5 w-5" />
         </button>
 
-        {/* Search Input Placeholder */}
         <div className="relative w-full max-w-sm hidden sm:block">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
@@ -35,9 +34,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
         </div>
       </div>
 
-      {/* Right Side Icons */}
       <div className="flex items-center space-x-4">
-        {/* Notification Icon */}
+
         <button
           className="relative flex h-9 w-9 items-center justify-center rounded-lg border hover:bg-accent hover:text-accent-foreground"
           aria-label="View notifications"
@@ -46,10 +44,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
           <span className="absolute right-2 top-2 flex h-2 w-2 rounded-full bg-destructive animate-pulse" />
         </button>
 
-        {/* Divider */}
         <div className="h-6 w-px bg-border hidden sm:block" />
 
-        {/* User Profile Info */}
         <div className="flex items-center space-x-3 cursor-pointer">
           <div className="hidden text-right sm:block">
             <p className="text-xs font-semibold">John Doe</p>

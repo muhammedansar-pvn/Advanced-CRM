@@ -6,17 +6,15 @@ export function filterCustomers(
   filters: CustomerFilters
 ): Customer[] {
   return customers.filter((customer) => {
-    // 1. Status Filter
+
     if (filters.status.length > 0 && !filters.status.includes(customer.status)) {
       return false;
     }
 
-    // 2. Company Filter
     if (filters.companies.length > 0 && !filters.companies.includes(customer.company)) {
       return false;
     }
 
-    // 3. Email Filter (Contains search, case insensitive)
     if (filters.email) {
       const emailQuery = filters.email.toLowerCase().trim();
       if (!customer.email.toLowerCase().includes(emailQuery)) {
@@ -24,7 +22,6 @@ export function filterCustomers(
       }
     }
 
-    // 4. Phone Filter (Contains search)
     if (filters.phone) {
       const phoneQuery = filters.phone.toLowerCase().trim();
       if (!customer.phone.toLowerCase().includes(phoneQuery)) {
@@ -32,7 +29,6 @@ export function filterCustomers(
       }
     }
 
-    // 5. Date Range Filter
     if (filters.dateRange.start || filters.dateRange.end) {
       if (!isDateWithinRange(customer.lastContact, filters.dateRange.start, filters.dateRange.end)) {
         return false;

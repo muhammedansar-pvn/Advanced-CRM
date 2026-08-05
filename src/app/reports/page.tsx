@@ -32,7 +32,7 @@ export default function ReportsPage() {
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Header */}
+
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Reports & Analytics</h1>
@@ -46,7 +46,6 @@ export default function ReportsPage() {
           </button>
         </div>
 
-        {/* Top Metric Cards */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <Card className="border-muted/60">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -96,9 +95,8 @@ export default function ReportsPage() {
           </Card>
         </div>
 
-        {/* Funnel & Monthly Target Grids */}
         <div className="grid gap-6 md:grid-cols-2">
-          {/* Conversion Funnel */}
+
           <Card className="border-muted/60">
             <CardHeader>
               <CardTitle className="text-lg font-bold">Sales Conversion Funnel</CardTitle>
@@ -122,7 +120,6 @@ export default function ReportsPage() {
             </CardContent>
           </Card>
 
-          {/* Monthly Revenue Chart representation */}
           <Card className="border-muted/60">
             <CardHeader>
               <CardTitle className="text-lg font-bold">Monthly Revenue Trend</CardTitle>
@@ -152,7 +149,6 @@ export default function ReportsPage() {
           </Card>
         </div>
 
-        {/* Top Reps Leaderboard */}
         <Card className="border-muted/60">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>

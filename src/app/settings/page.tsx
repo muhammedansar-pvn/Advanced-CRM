@@ -22,12 +22,10 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<"profile" | "notifications" | "security" | "integrations">("profile");
   const [saved, setSaved] = useState(false);
 
-  // Profile Form state
   const [name, setName] = useState("John Doe");
   const [email, setEmail] = useState("john.doe@apexcrm.com");
   const [role, setRole] = useState("Administrator");
 
-  // Notifications state
   const [emailAlerts, setEmailAlerts] = useState(true);
   const [dealUpdates, setDealUpdates] = useState(true);
   const [weeklyReport, setWeeklyReport] = useState(false);
@@ -40,7 +38,7 @@ export default function SettingsPage() {
   return (
     <DashboardLayout>
       <div className="space-y-8 max-w-5xl">
-        {/* Header */}
+
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
@@ -57,7 +55,6 @@ export default function SettingsPage() {
           </button>
         </div>
 
-        {/* Tab Navigation */}
         <div className="flex border-b space-x-6 overflow-x-auto">
           {[
             { id: "profile", label: "General Profile", icon: User },
@@ -85,7 +82,6 @@ export default function SettingsPage() {
           })}
         </div>
 
-        {/* Tab Content */}
         {activeTab === "profile" && (
           <div className="space-y-6">
             <Card className="border-muted/60">

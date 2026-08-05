@@ -22,7 +22,7 @@ export const CustomerRow = React.memo(function CustomerRow({
   onEdit,
   onDelete,
 }: CustomerRowProps) {
-  // Format Date for premium display: e.g., "Aug 1, 2026"
+
   const formatDate = React.useCallback((dateString: string) => {
     try {
       const date = new Date(dateString);
@@ -54,7 +54,7 @@ export const CustomerRow = React.memo(function CustomerRow({
       <Card className="overflow-hidden border-muted/60 relative group">
         <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-primary to-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         <CardContent className="p-5">
-          {/* Header section of mobile card */}
+
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center space-x-3">
               <Avatar className="h-10 w-10 border shadow-sm">
@@ -80,7 +80,6 @@ export const CustomerRow = React.memo(function CustomerRow({
             />
           </div>
 
-          {/* Details list */}
           <div className="space-y-2.5 text-xs text-muted-foreground border-t pt-3.5">
             <div className="flex items-center space-x-2">
               <Building2 className="h-3.5 w-3.5 shrink-0 text-muted-foreground/80" />
@@ -107,7 +106,6 @@ export const CustomerRow = React.memo(function CustomerRow({
     );
   }
 
-  // Otherwise table row
   return (
     <TableRow className="group">
       <TableCell className="w-[80px]">

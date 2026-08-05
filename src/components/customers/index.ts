@@ -9,5 +9,5 @@ export * from "./CustomerFormDialog";
 export * from "./CustomerDetailsDialog";
 export * from "./DeleteCustomerDialog";
 export * from "./CustomerToolbar";
-
-
+export * from "./SortableCustomerRow";
+export * from "./SortableCustomerCard";

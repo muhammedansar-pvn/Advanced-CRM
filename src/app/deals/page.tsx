@@ -59,7 +59,7 @@ export default function DealsPage() {
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Page Header */}
+
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Deals Pipeline</h1>
@@ -73,7 +73,6 @@ export default function DealsPage() {
           </button>
         </div>
 
-        {/* Metrics Cards */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card className="border-muted/60">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -130,7 +129,6 @@ export default function DealsPage() {
           </Card>
         </div>
 
-        {/* Filters & Search */}
         <div className="flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -160,7 +158,6 @@ export default function DealsPage() {
           </div>
         </div>
 
-        {/* Pipeline Board */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {STAGES.map((stage) => {
             const stageDeals = filteredDeals.filter((d) => d.stage === stage.id);

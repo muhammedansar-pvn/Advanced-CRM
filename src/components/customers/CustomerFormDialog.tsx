@@ -6,7 +6,12 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { CustomerForm, CustomerFormValues } from "./CustomerForm";
+import { CustomerForm } from "./CustomerForm";
+import { CustomerFormValues } from "@/schemas/customerSchema";
+
+type DialogPointerDownOutsideEvent = NonNullable<
+  React.ComponentPropsWithoutRef<typeof DialogContent>["onPointerDownOutside"]
+> extends (e: infer E) => void ? E : never;
 
 interface CustomerFormDialogProps {
   isOpen: boolean;
@@ -14,6 +19,7 @@ interface CustomerFormDialogProps {
   onSubmit: (values: CustomerFormValues) => void;
   defaultValues?: Partial<CustomerFormValues>;
   mode: "add" | "edit";
+  isSubmitting?: boolean;
 }
 
 export const CustomerFormDialog = React.memo(function CustomerFormDialog({
@@ -22,10 +28,13 @@ export const CustomerFormDialog = React.memo(function CustomerFormDialog({
   onSubmit,
   defaultValues,
   mode,
+  isSubmitting = false,
 }: CustomerFormDialogProps) {
   const [isDirty, setIsDirty] = React.useState(false);
 
   const handleCloseAttempt = React.useCallback(() => {
+    if (isSubmitting) return;
+
     if (isDirty) {
       const confirmDiscard = window.confirm(
         "You have unsaved changes. Are you sure you want to discard them?"
@@ -36,7 +45,7 @@ export const CustomerFormDialog = React.memo(function CustomerFormDialog({
     } else {
       onClose();
     }
-  }, [isDirty, onClose]);
+  }, [isDirty, onClose, isSubmitting]);
 
   const handleOpenChange = React.useCallback(
     (open: boolean) => {
@@ -47,22 +56,32 @@ export const CustomerFormDialog = React.memo(function CustomerFormDialog({
     [handleCloseAttempt]
   );
 
+  const handlePointerDownOutside = React.useCallback(
+    (e: DialogPointerDownOutsideEvent) => {
+      if (isDirty || isSubmitting) {
+        e.preventDefault();
+        handleCloseAttempt();
+      }
+    },
+    [isDirty, isSubmitting, handleCloseAttempt]
+  );
+
+  const handleEscapeKeyDown = React.useCallback(
+    (e: KeyboardEvent) => {
+      if (isDirty || isSubmitting) {
+        e.preventDefault();
+        handleCloseAttempt();
+      }
+    },
+    [isDirty, isSubmitting, handleCloseAttempt]
+  );
+
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent
         className="max-w-[92%] sm:max-w-[500px] rounded-xl overflow-y-auto max-h-[90vh]"
-        onPointerDownOutside={(e) => {
-          if (isDirty) {
-            e.preventDefault();
-            handleCloseAttempt();
-          }
-        }}
-        onEscapeKeyDown={(e) => {
-          if (isDirty) {
-            e.preventDefault();
-            handleCloseAttempt();
-          }
-        }}
+        onPointerDownOutside={handlePointerDownOutside}
+        onEscapeKeyDown={handleEscapeKeyDown}
       >
         <DialogHeader>
           <DialogTitle className="text-lg font-bold">
@@ -76,7 +95,6 @@ export const CustomerFormDialog = React.memo(function CustomerFormDialog({
         </DialogHeader>
 
         <div className="py-2">
-          {/* Key key={isOpen} resets form state when dialog opens/closes */}
           <CustomerForm
             key={isOpen ? `${mode}_open` : "closed"}
             mode={mode}
@@ -84,6 +102,7 @@ export const CustomerFormDialog = React.memo(function CustomerFormDialog({
             onSubmit={onSubmit}
             onCancel={handleCloseAttempt}
             onDirtyChange={setIsDirty}
+            isSubmitting={isSubmitting}
           />
         </div>
       </DialogContent>

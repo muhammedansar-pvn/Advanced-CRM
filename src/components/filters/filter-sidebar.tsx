@@ -1,6 +1,12 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
 import { StatusFilter } from "./status-filter";
 import { CompanyFilter } from "./company-filter";
 import { EmailFilter } from "./email-filter";
@@ -22,9 +28,8 @@ interface FilterSidebarProps {
   deleteSavedFilter: (id: string) => void;
   renameSavedFilter: (id: string, newName: string) => void;
   loadSavedFilter: (id: string) => void;
-  isOpen?: boolean; // Mobile sheet toggle
-  onClose?: () => void; // Mobile sheet close
-  isMobile?: boolean; // Inline layout vs. overlay layout
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export const FilterSidebar = React.memo(function FilterSidebar({
@@ -38,103 +43,105 @@ export const FilterSidebar = React.memo(function FilterSidebar({
   deleteSavedFilter,
   renameSavedFilter,
   loadSavedFilter,
-  isOpen = false,
+  isOpen,
   onClose,
-  isMobile = false,
 }: FilterSidebarProps) {
-  // Shared inner contents of the filters panel
-  const filterContent = React.useMemo(() => (
-    <div className="space-y-6">
-      {/* Header with Clear Button */}
-      <div className="flex items-center justify-between pb-4 border-b">
-        <div className="flex items-center space-x-2">
-          <Filter className="h-4 w-4 text-primary" />
-          <h3 className="font-semibold text-sm text-foreground">Advanced Filters</h3>
-        </div>
-        {activeFilterCount > 0 && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={resetFilters}
-            className="h-7 px-2 text-xs font-semibold text-destructive hover:bg-destructive/10 hover:text-destructive flex items-center space-x-1"
-          >
-            <Trash2 className="h-3.5 w-3.5" />
-            <span>Clear All</span>
-          </Button>
-        )}
-      </div>
+  const handleStatusChange = React.useCallback(
+    (status: CustomerFilters["status"]) => updateFilters({ status }),
+    [updateFilters]
+  );
+  const handleCompaniesChange = React.useCallback(
+    (companies: CustomerFilters["companies"]) => updateFilters({ companies }),
+    [updateFilters]
+  );
+  const handleEmailChange = React.useCallback(
+    (email: string) => updateFilters({ email }),
+    [updateFilters]
+  );
+  const handlePhoneChange = React.useCallback(
+    (phone: string) => updateFilters({ phone }),
+    [updateFilters]
+  );
+  const handleDateRangeChange = React.useCallback(
+    (start: string, end: string) => updateFilters({ dateRange: { start, end } }),
+    [updateFilters]
+  );
+  const handleOpenChange = React.useCallback(
+    (open: boolean) => { if (!open) onClose(); },
+    [onClose]
+  );
 
-      {/* Preset Filters */}
-      <FilterActions onApplyPreset={applyPreset} />
-
-      {/* Filters Stack */}
-      <div className="space-y-5">
-        <StatusFilter
-          selectedStatus={filters.status}
-          onChange={(status) => updateFilters({ status })}
-        />
-        <CompanyFilter
-          selectedCompanies={filters.companies}
-          onChange={(companies) => updateFilters({ companies })}
-        />
-        <EmailFilter
-          value={filters.email}
-          onChange={(email) => updateFilters({ email })}
-        />
-        <PhoneFilter
-          value={filters.phone}
-          onChange={(phone) => updateFilters({ phone })}
-        />
-        <DateRangeFilter
-          start={filters.dateRange.start}
-          end={filters.dateRange.end}
-          onChange={(start, end) => updateFilters({ dateRange: { start, end } })}
-        />
-      </div>
-
-      {/* Local Storage Saved Filters Panel */}
-      <SavedFilters
-        savedFilters={savedFilters}
-        onSave={saveCurrentFilter}
-        onDelete={deleteSavedFilter}
-        onRename={renameSavedFilter}
-        onLoad={loadSavedFilter}
-      />
-    </div>
-  ), [
-    filters,
-    savedFilters,
-    activeFilterCount,
-    updateFilters,
-    resetFilters,
-    applyPreset,
-    saveCurrentFilter,
-    deleteSavedFilter,
-    renameSavedFilter,
-    loadSavedFilter,
-  ]);
-
-  // If mobile, render as a Radix Sheet drawer
-  if (isMobile) {
-    return (
-      <Sheet open={isOpen} onOpenChange={(open) => !open && onClose && onClose()}>
-        <SheetContent side="right" className="w-[320px] sm:w-[350px] overflow-y-auto z-50">
-          <SheetHeader className="pb-2 border-b">
-            <SheetTitle className="text-left font-bold">Filters Overview</SheetTitle>
-          </SheetHeader>
-          <div className="py-4">
-            {filterContent}
-          </div>
-        </SheetContent>
-      </Sheet>
-    );
-  }
-
-  // If desktop/tablet inline view, render as a standard aside panel
   return (
-    <aside className="w-64 shrink-0 bg-card border rounded-xl p-5 shadow-sm overflow-y-auto max-h-[calc(100vh-8.5rem)] sticky top-24">
-      {filterContent}
-    </aside>
+    <Sheet open={isOpen} onOpenChange={handleOpenChange}>
+      <SheetContent
+        side="right"
+        className="w-[320px] sm:w-[380px] flex flex-col p-0 overflow-hidden"
+        aria-label="Advanced filters panel"
+      >
+
+        <SheetHeader className="px-5 pt-5 pb-4 border-b shrink-0">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Filter className="h-4 w-4 text-primary" />
+              <SheetTitle className="text-sm font-semibold text-foreground">
+                Advanced Filters
+              </SheetTitle>
+            </div>
+            {activeFilterCount > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={resetFilters}
+                className="h-7 px-2 text-xs font-semibold text-destructive hover:bg-destructive/10 hover:text-destructive flex items-center space-x-1"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                <span>Clear All</span>
+              </Button>
+            )}
+          </div>
+          <SheetDescription className="text-xs text-muted-foreground text-left">
+            Narrow your customer list using the options below.
+          </SheetDescription>
+        </SheetHeader>
+
+        <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6">
+
+          <FilterActions onApplyPreset={applyPreset} />
+
+          <div className="space-y-5">
+            <StatusFilter
+              selectedStatus={filters.status}
+              onChange={handleStatusChange}
+            />
+            <CompanyFilter
+              selectedCompanies={filters.companies}
+              onChange={handleCompaniesChange}
+            />
+            <EmailFilter
+              value={filters.email}
+              onChange={handleEmailChange}
+            />
+            <PhoneFilter
+              value={filters.phone}
+              onChange={handlePhoneChange}
+            />
+            <DateRangeFilter
+              start={filters.dateRange.start}
+              end={filters.dateRange.end}
+              onChange={handleDateRangeChange}
+            />
+          </div>
+
+          <SavedFilters
+            savedFilters={savedFilters}
+            onSave={saveCurrentFilter}
+            onDelete={deleteSavedFilter}
+            onRename={renameSavedFilter}
+            onLoad={loadSavedFilter}
+          />
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 });
 FilterSidebar.displayName = "FilterSidebar";

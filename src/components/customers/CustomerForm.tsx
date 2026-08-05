@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -51,7 +53,7 @@ export const CustomerForm = React.memo(function CustomerForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 text-left">
-      {/* Name */}
+
       <div className="space-y-1.5">
         <label htmlFor="form-name" className="text-xs font-semibold text-foreground">
           Full Name <span className="text-destructive">*</span>
@@ -72,7 +74,6 @@ export const CustomerForm = React.memo(function CustomerForm({
         )}
       </div>
 
-      {/* Email & Phone side-by-side */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <label htmlFor="form-email" className="text-xs font-semibold text-foreground">
@@ -115,7 +116,6 @@ export const CustomerForm = React.memo(function CustomerForm({
         </div>
       </div>
 
-      {/* Company & Status side-by-side */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <label htmlFor="form-company" className="text-xs font-semibold text-foreground">
@@ -159,7 +159,6 @@ export const CustomerForm = React.memo(function CustomerForm({
         </div>
       </div>
 
-      {/* Optional Avatar url */}
       <div className="space-y-1.5">
         <label htmlFor="form-avatar" className="text-xs font-semibold text-foreground">
           Avatar URL (optional)
@@ -172,7 +171,6 @@ export const CustomerForm = React.memo(function CustomerForm({
         />
       </div>
 
-      {/* Notes with dynamic character counter */}
       <div className="space-y-1.5">
         <div className="flex justify-between items-center">
           <label htmlFor="form-notes" className="text-xs font-semibold text-foreground">
@@ -196,7 +194,6 @@ export const CustomerForm = React.memo(function CustomerForm({
         )}
       </div>
 
-      {/* Action Buttons */}
       <div className="flex justify-end space-x-2 pt-4 border-t mt-6">
         <Button
           type="button"
@@ -226,4 +223,3 @@ export const CustomerForm = React.memo(function CustomerForm({
   );
 });
 CustomerForm.displayName = "CustomerForm";
-export type { CustomerFormValues };

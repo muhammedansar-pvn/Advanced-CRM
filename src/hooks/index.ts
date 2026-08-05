@@ -1,4 +1,8 @@
 export * from "./useCustomerFilters";
 export * from "./useCustomerCrud";
-
-
+export * from "./useCustomers";
+export * from "./useCustomer";
+export * from "./useCreateCustomer";
+export * from "./useUpdateCustomer";
+export * from "./useDeleteCustomer";
+export * from "./useCustomerOrdering";

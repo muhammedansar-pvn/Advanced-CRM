@@ -33,7 +33,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   return (
     <>
-      {/* Mobile Backdrop */}
+
       {isOpen && (
         <div
           className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden"
@@ -41,14 +41,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         />
       )}
 
-      {/* Sidebar Frame */}
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r bg-card text-card-foreground transition-transform duration-300 ease-in-out lg:static lg:translate-x-0",
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        {/* Header Header */}
+
         <div className="flex h-16 items-center justify-between px-6 border-b">
           <Link href="/" className="flex items-center space-x-2 font-bold text-xl tracking-tight">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-md shadow-primary/20">
@@ -67,7 +66,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           </button>
         </div>
 
-        {/* Navigation Items */}
         <nav className="flex-1 space-y-1.5 px-4 py-6 overflow-y-auto">
           {sidebarItems.map((item) => {
             const Icon = item.icon;
@@ -99,7 +97,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           })}
         </nav>
 
-        {/* Footer User Status */}
         <div className="p-4 border-t bg-muted/30">
           <div className="flex items-center space-x-3 rounded-lg p-2 hover:bg-accent cursor-pointer transition-colors duration-200">
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-sm">

@@ -7,7 +7,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Loader2 } from "lucide-react";
 import { Customer } from "@/types";
 
 interface DeleteCustomerDialogProps {
@@ -15,6 +15,7 @@ interface DeleteCustomerDialogProps {
   onClose: () => void;
   onConfirm: () => void;
   customer: Customer | null;
+  isDeleting?: boolean;
 }
 
 export const DeleteCustomerDialog = React.memo(function DeleteCustomerDialog({
@@ -22,11 +23,12 @@ export const DeleteCustomerDialog = React.memo(function DeleteCustomerDialog({
   onClose,
   onConfirm,
   customer,
+  isDeleting = false,
 }: DeleteCustomerDialogProps) {
   if (!customer) return null;
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && !isDeleting && onClose()}>
       <DialogContent className="max-w-[92%] sm:max-w-[400px] rounded-xl p-6">
         <DialogHeader className="flex flex-col items-center text-center space-y-3 pb-2">
           <div className="h-10 w-10 rounded-full bg-destructive/10 flex items-center justify-center text-destructive shrink-0">
@@ -38,12 +40,12 @@ export const DeleteCustomerDialog = React.memo(function DeleteCustomerDialog({
           </DialogDescription>
         </DialogHeader>
 
-        {/* Buttons */}
         <div className="flex flex-col sm:flex-row gap-2 pt-4 border-t mt-4">
           <Button
             type="button"
             variant="outline"
             onClick={onClose}
+            disabled={isDeleting}
             className="w-full sm:order-1 text-xs"
           >
             Cancel
@@ -52,9 +54,17 @@ export const DeleteCustomerDialog = React.memo(function DeleteCustomerDialog({
             type="button"
             variant="destructive"
             onClick={onConfirm}
-            className="w-full sm:order-2 text-xs font-semibold"
+            disabled={isDeleting}
+            className="w-full sm:order-2 text-xs font-semibold min-h-[36px]"
           >
-            Delete Customer
+            {isDeleting ? (
+              <span className="flex items-center justify-center space-x-1.5">
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                <span>Deleting...</span>
+              </span>
+            ) : (
+              <span>Delete Customer</span>
+            )}
           </Button>
         </div>
       </DialogContent>
