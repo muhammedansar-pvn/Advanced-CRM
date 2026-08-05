@@ -1,7 +1,7 @@
 import { Customer } from "@/types";
 import { mockCustomers } from "@/data";
 
-const STORAGE_KEY = "apex_crm_customers_db_v1";
+const STORAGE_KEY = "apex_crm_customers_db_v2";
 
 const MIN_DELAY = 300;
 const MAX_DELAY = 500;
