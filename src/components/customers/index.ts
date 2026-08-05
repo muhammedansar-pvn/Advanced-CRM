@@ -11,3 +11,5 @@ export * from "./DeleteCustomerDialog";
 export * from "./CustomerToolbar";
 export * from "./SortableCustomerRow";
 export * from "./SortableCustomerCard";
+export * from "./BulkActionToolbar";
+export * from "./BulkDeleteDialog";

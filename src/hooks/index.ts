@@ -6,3 +6,6 @@ export * from "./useCreateCustomer";
 export * from "./useUpdateCustomer";
 export * from "./useDeleteCustomer";
 export * from "./useCustomerOrdering";
+export * from "./useCustomerSelection";
+export * from "./useBulkDeleteCustomers";
+export * from "./useBulkUpdateStatus";

@@ -2,6 +2,7 @@ import * as React from "react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { CustomerStatusBadge } from "./customer-status-badge";
 import { CustomerActions } from "./customer-actions";
 import { Customer } from "@/types";
@@ -10,6 +11,7 @@ import { Building2, Mail, Phone, Calendar } from "lucide-react";
 interface CustomerRowProps {
   customer: Customer;
   layout: "table" | "card";
+  isSelected?: boolean;
   onView: (customer: Customer) => void;
   onEdit: (customer: Customer) => void;
   onDelete: (customer: Customer) => void;
@@ -18,6 +20,7 @@ interface CustomerRowProps {
 export const CustomerRow = React.memo(function CustomerRow({
   customer,
   layout,
+  isSelected = false,
   onView,
   onEdit,
   onDelete,
@@ -110,7 +113,11 @@ export const CustomerRow = React.memo(function CustomerRow({
   }
 
   return (
-    <TableRow className="group transition-colors duration-150 hover:bg-muted/30">
+    <TableRow className={`group transition-colors duration-150 ${isSelected ? "bg-primary/5 dark:bg-primary/10" : "hover:bg-muted/30"}`}>
+      <TableCell className="w-[36px] pr-0 pl-3">
+        <Checkbox checked={isSelected} className="translate-y-[2px]" />
+      </TableCell>
+      <TableCell className="w-[36px] pr-0 pl-2" />
       <TableCell className="w-[80px]">
         <Avatar className="h-9 w-9 border shadow-sm ring-0 group-hover:ring-2 group-hover:ring-primary/10 transition-all duration-150">
           <AvatarImage src={customer.avatar} alt={customer.name} />

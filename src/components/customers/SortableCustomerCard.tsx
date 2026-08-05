@@ -3,6 +3,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Checkbox } from "@/components/ui/checkbox";
 import { CustomerStatusBadge } from "./customer-status-badge";
 import { CustomerActions } from "./customer-actions";
 import { Customer } from "@/types";
@@ -10,6 +11,9 @@ import { Building2, Mail, Phone, Calendar, GripVertical } from "lucide-react";
 
 interface SortableCustomerCardProps {
   customer: Customer;
+  index?: number;
+  isSelected?: boolean;
+  onToggleSelect?: (id: string, index?: number, isShift?: boolean) => void;
   onView: (customer: Customer) => void;
   onEdit: (customer: Customer) => void;
   onDelete: (customer: Customer) => void;
@@ -17,6 +21,9 @@ interface SortableCustomerCardProps {
 
 export const SortableCustomerCard = React.memo(function SortableCustomerCard({
   customer,
+  index,
+  isSelected = false,
+  onToggleSelect,
   onView,
   onEdit,
   onDelete,
@@ -59,12 +66,22 @@ export const SortableCustomerCard = React.memo(function SortableCustomerCard({
   const handleEdit = React.useCallback(() => onEdit(customer), [customer, onEdit]);
   const handleDelete = React.useCallback(() => onDelete(customer), [customer, onDelete]);
 
+  const handleCheckboxClick = React.useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (onToggleSelect) {
+        onToggleSelect(customer.id, index, e.shiftKey);
+      }
+    },
+    [customer.id, index, onToggleSelect]
+  );
+
   return (
     <div ref={setNodeRef} style={style}>
       <Card
         className={`card-hover overflow-hidden border-muted/60 relative group cursor-default ${
-          isDragging ? "shadow-lg border-primary/30" : ""
-        }`}
+          isSelected ? "border-primary/40 bg-primary/5 dark:bg-primary/10" : ""
+        } ${isDragging ? "shadow-lg border-primary/30" : ""}`}
       >
         {/* Accent bar on hover */}
         <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-primary to-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -73,6 +90,12 @@ export const SortableCustomerCard = React.memo(function SortableCustomerCard({
           {/* Header row */}
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center space-x-2">
+              <Checkbox
+                checked={isSelected}
+                onClick={handleCheckboxClick}
+                aria-label={`Select ${customer.name}`}
+                className="mt-0.5"
+              />
               {/* Drag handle */}
               <button
                 type="button"

@@ -3,12 +3,16 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Checkbox } from "@/components/ui/checkbox";
 import { CustomerStatusBadge } from "./customer-status-badge";
 import { CustomerActions } from "./customer-actions";
 import { Customer } from "@/types";
 
 interface SortableCustomerRowProps {
   customer: Customer;
+  index?: number;
+  isSelected?: boolean;
+  onToggleSelect?: (id: string, index?: number, isShift?: boolean) => void;
   onView: (customer: Customer) => void;
   onEdit: (customer: Customer) => void;
   onDelete: (customer: Customer) => void;
@@ -16,6 +20,9 @@ interface SortableCustomerRowProps {
 
 export const SortableCustomerRow = React.memo(function SortableCustomerRow({
   customer,
+  index,
+  isSelected = false,
+  onToggleSelect,
   onView,
   onEdit,
   onDelete,
@@ -59,13 +66,33 @@ export const SortableCustomerRow = React.memo(function SortableCustomerRow({
   const handleEdit = React.useCallback(() => onEdit(customer), [customer, onEdit]);
   const handleDelete = React.useCallback(() => onDelete(customer), [customer, onDelete]);
 
+  const handleCheckboxClick = React.useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (onToggleSelect) {
+        onToggleSelect(customer.id, index, e.shiftKey);
+      }
+    },
+    [customer.id, index, onToggleSelect]
+  );
+
   return (
     <TableRow
       ref={setNodeRef}
       style={style}
-      className={`group transition-colors duration-150 hover:bg-muted/30 ${isDragging ? "bg-muted/60 shadow-md" : ""}`}
+      className={`group transition-colors duration-150 ${
+        isSelected ? "bg-primary/5 dark:bg-primary/10 hover:bg-primary/8" : "hover:bg-muted/30"
+      } ${isDragging ? "bg-muted/60 shadow-md" : ""}`}
     >
       <TableCell className="w-[36px] pr-0 pl-3">
+        <Checkbox
+          checked={isSelected}
+          onClick={handleCheckboxClick}
+          aria-label={`Select ${customer.name}`}
+          className="translate-y-[2px]"
+        />
+      </TableCell>
+      <TableCell className="w-[36px] pr-0 pl-2">
         <button
           type="button"
           className="cursor-grab active:cursor-grabbing touch-none text-muted-foreground/30 hover:text-muted-foreground transition-colors duration-150 p-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"

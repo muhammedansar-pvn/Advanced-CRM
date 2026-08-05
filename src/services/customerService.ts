@@ -98,4 +98,22 @@ export const customerService = {
     saveDb(updated);
     return id;
   },
+
+  async deleteBulkCustomers(ids: string[]): Promise<string[]> {
+    await delay();
+    const db = getDb();
+    const idSet = new Set(ids);
+    const updated = db.filter((c) => !idSet.has(c.id));
+    saveDb(updated);
+    return ids;
+  },
+
+  async updateBulkCustomerStatus(ids: string[], status: "active" | "inactive"): Promise<string[]> {
+    await delay();
+    const db = getDb();
+    const idSet = new Set(ids);
+    const updated = db.map((c) => (idSet.has(c.id) ? { ...c, status } : c));
+    saveDb(updated);
+    return ids;
+  },
 };

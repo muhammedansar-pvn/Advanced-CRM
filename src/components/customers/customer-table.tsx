@@ -24,6 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { CustomerPagination } from "./customer-pagination";
 import { CustomerRow } from "./customer-row";
@@ -33,8 +34,16 @@ import { CustomerToolbar } from "./CustomerToolbar";
 import { CustomerFormDialog } from "./CustomerFormDialog";
 import { CustomerDetailsDialog } from "./CustomerDetailsDialog";
 import { DeleteCustomerDialog } from "./DeleteCustomerDialog";
+import { BulkActionToolbar } from "./BulkActionToolbar";
+import { BulkDeleteDialog } from "./BulkDeleteDialog";
 import { FilterSidebar, FilterBadge, ActiveFilterCount } from "@/components/filters";
-import { useCustomerFilters, useCustomerCrud } from "@/hooks";
+import {
+  useCustomerFilters,
+  useCustomerCrud,
+  useCustomerSelection,
+  useBulkDeleteCustomers,
+  useBulkUpdateStatus,
+} from "@/hooks";
 import { useCustomerOrdering } from "@/hooks/useCustomerOrdering";
 import {
   searchCustomers,
@@ -336,6 +345,19 @@ export function CustomerTable() {
 
   const showSkeleton = isLoadingTimer || isQueryLoading;
 
+  const {
+    selectedIds,
+    selectedCount,
+    toggleSelect,
+    toggleSelectAllPage,
+    clearSelection,
+    isSelected,
+  } = useCustomerSelection();
+
+  const bulkDeleteMutation = useBulkDeleteCustomers();
+  const bulkUpdateStatusMutation = useBulkUpdateStatus();
+  const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = React.useState(false);
+
   const searchedCustomers = React.useMemo(
     () => searchCustomers(orderedCustomers, debouncedSearchQuery),
     [orderedCustomers, debouncedSearchQuery]
@@ -355,6 +377,40 @@ export function CustomerTable() {
     () => paginateCustomers(sortedCustomers, currentPage, pageSize),
     [sortedCustomers, currentPage, pageSize]
   );
+
+  const currentPageIds = React.useMemo(
+    () => paginatedResult.items.map((c) => c.id),
+    [paginatedResult.items]
+  );
+
+  const isAllPageSelected = React.useMemo(
+    () => currentPageIds.length > 0 && currentPageIds.every((id) => selectedIds.has(id)),
+    [currentPageIds, selectedIds]
+  );
+
+  const handleSelectAllPageToggle = React.useCallback(() => {
+    toggleSelectAllPage(currentPageIds);
+  }, [toggleSelectAllPage, currentPageIds]);
+
+  const handleBulkStatusChange = React.useCallback(
+    (status: "active" | "inactive") => {
+      const ids = Array.from(selectedIds);
+      if (ids.length === 0) return;
+      bulkUpdateStatusMutation.mutate({ ids, status });
+    },
+    [selectedIds, bulkUpdateStatusMutation]
+  );
+
+  const handleBulkDeleteConfirm = React.useCallback(() => {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+    bulkDeleteMutation.mutate(ids, {
+      onSuccess: () => {
+        setBulkDeleteDialogOpen(false);
+        clearSelection();
+      },
+    });
+  }, [selectedIds, bulkDeleteMutation, clearSelection]);
 
   const sortableIds = React.useMemo(
     () => paginatedResult.items.map((c) => c.id),
@@ -398,6 +454,16 @@ export function CustomerTable() {
         loadSavedFilter={loadSavedFilter}
         isOpen={filterSheetOpen}
         onClose={handleFilterClose}
+      />
+
+      {/* Bulk Action Toolbar */}
+      <BulkActionToolbar
+        selectedCount={selectedCount}
+        onClearSelection={clearSelection}
+        onDeleteSelected={() => setBulkDeleteDialogOpen(true)}
+        onStatusChange={handleBulkStatusChange}
+        isDeleting={bulkDeleteMutation.isPending}
+        isUpdating={bulkUpdateStatusMutation.isPending}
       />
 
       {/* Toolbar */}
@@ -497,7 +563,15 @@ export function CustomerTable() {
                 <Table>
                   <TableHeader className="bg-muted/30">
                     <TableRow>
-                      <TableHead className="w-[36px] pr-0 pl-3" aria-label="Drag handle" />
+                      <TableHead className="w-[36px] pr-0 pl-3">
+                        <Checkbox
+                          checked={isAllPageSelected}
+                          onCheckedChange={handleSelectAllPageToggle}
+                          aria-label="Select all customers on current page"
+                          className="translate-y-[2px]"
+                        />
+                      </TableHead>
+                      <TableHead className="w-[36px] pr-0 pl-2" aria-label="Drag handle" />
                       <TableHead className="w-[80px]">Avatar</TableHead>
                       <TableHead
                         onClick={() => handleSort("name")}
@@ -548,13 +622,13 @@ export function CustomerTable() {
                       <TableSkeleton />
                     ) : hasNoCustomers ? (
                       <TableRow>
-                        <TableCell colSpan={9}>
+                        <TableCell colSpan={10}>
                           <EmptyNoCustomers onAdd={openAddDialog} />
                         </TableCell>
                       </TableRow>
                     ) : hasNoResults ? (
                       <TableRow>
-                        <TableCell colSpan={9}>
+                        <TableCell colSpan={10}>
                           <EmptyNoResults
                             onReset={resetFilters}
                             hasActiveFilters={activeFilterCount > 0}
@@ -563,10 +637,15 @@ export function CustomerTable() {
                       </TableRow>
                     ) : (
                       <SortableContext items={sortableIds} strategy={verticalListSortingStrategy}>
-                        {paginatedResult.items.map((customer) => (
+                        {paginatedResult.items.map((customer, idx) => (
                           <SortableCustomerRow
                             key={customer.id}
                             customer={customer}
+                            index={idx}
+                            isSelected={isSelected(customer.id)}
+                            onToggleSelect={(id, index, isShift) =>
+                              toggleSelect(id, index, isShift, currentPageIds)
+                            }
                             onView={openViewDialog}
                             onEdit={openEditDialog}
                             onDelete={openDeleteDialog}
@@ -620,10 +699,15 @@ export function CustomerTable() {
                 >
                   <SortableContext items={sortableIds} strategy={verticalListSortingStrategy}>
                     <div className="grid gap-4 sm:grid-cols-2">
-                      {paginatedResult.items.map((customer) => (
+                      {paginatedResult.items.map((customer, idx) => (
                         <SortableCustomerCard
                           key={customer.id}
                           customer={customer}
+                          index={idx}
+                          isSelected={isSelected(customer.id)}
+                          onToggleSelect={(id, index, isShift) =>
+                            toggleSelect(id, index, isShift, currentPageIds)
+                          }
                           onView={openViewDialog}
                           onEdit={openEditDialog}
                           onDelete={openDeleteDialog}
@@ -683,6 +767,14 @@ export function CustomerTable() {
         onConfirm={handleDeleteConfirm}
         customer={selectedCustomer}
         isDeleting={isDeleting}
+      />
+
+      <BulkDeleteDialog
+        isOpen={bulkDeleteDialogOpen}
+        onClose={() => setBulkDeleteDialogOpen(false)}
+        onConfirm={handleBulkDeleteConfirm}
+        selectedCount={selectedCount}
+        isDeleting={bulkDeleteMutation.isPending}
       />
     </div>
   );
