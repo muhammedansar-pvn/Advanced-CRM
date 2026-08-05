@@ -2,7 +2,7 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { CustomerSearch } from "./customer-search";
 import { ActiveFilterCount } from "@/components/filters";
-import { Plus, Users, SlidersHorizontal } from "lucide-react";
+import { Plus, Users, SlidersHorizontal, Download, Loader2 } from "lucide-react";
 
 interface CustomerToolbarProps {
   searchQuery: string;
@@ -12,6 +12,8 @@ interface CustomerToolbarProps {
   totalCount: number;
   onAddClick: () => void;
   onFilterToggle: () => void;
+  onExportClick?: () => void;
+  isExporting?: boolean;
 }
 
 export const CustomerToolbar = React.memo(function CustomerToolbar({
@@ -22,6 +24,8 @@ export const CustomerToolbar = React.memo(function CustomerToolbar({
   totalCount,
   onAddClick,
   onFilterToggle,
+  onExportClick,
+  isExporting = false,
 }: CustomerToolbarProps) {
   return (
     <div
@@ -35,7 +39,7 @@ export const CustomerToolbar = React.memo(function CustomerToolbar({
       </div>
 
       {/* Actions row */}
-      <div className="flex items-center gap-2 justify-between sm:justify-end">
+      <div className="flex items-center gap-2 justify-between sm:justify-end flex-wrap">
         {/* Filters button */}
         <Button
           variant="outline"
@@ -50,6 +54,24 @@ export const CustomerToolbar = React.memo(function CustomerToolbar({
             <ActiveFilterCount count={activeFilterCount} />
           )}
         </Button>
+
+        {/* Export CSV button */}
+        {onExportClick && (
+          <Button
+            variant="outline"
+            onClick={onExportClick}
+            disabled={isExporting || filteredCount === 0}
+            className="flex items-center gap-1.5 text-xs font-semibold h-9 hover:bg-accent transition-colors duration-150"
+            aria-label="Export currently filtered customers to CSV"
+          >
+            {isExporting ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+            ) : (
+              <Download className="h-3.5 w-3.5" aria-hidden="true" />
+            )}
+            <span>Export CSV</span>
+          </Button>
+        )}
 
         {/* Count pill — hidden on smallest screens */}
         <div

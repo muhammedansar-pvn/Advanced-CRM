@@ -45,12 +45,14 @@ import {
   useBulkUpdateStatus,
 } from "@/hooks";
 import { useCustomerOrdering } from "@/hooks/useCustomerOrdering";
+import { toast } from "sonner";
 import {
   searchCustomers,
   sortCustomers,
   paginateCustomers,
   filterCustomers,
   formatDateRange,
+  exportCustomersToCsv,
   SortKey,
   SortDirection,
 } from "@/utils";
@@ -357,6 +359,7 @@ export function CustomerTable() {
   const bulkDeleteMutation = useBulkDeleteCustomers();
   const bulkUpdateStatusMutation = useBulkUpdateStatus();
   const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = React.useState(false);
+  const [isExporting, setIsExporting] = React.useState(false);
 
   const searchedCustomers = React.useMemo(
     () => searchCustomers(orderedCustomers, debouncedSearchQuery),
@@ -372,6 +375,27 @@ export function CustomerTable() {
     () => sortCustomers(filteredCustomers, sortKey, sortDirection),
     [filteredCustomers, sortKey, sortDirection]
   );
+
+  const handleExportCsv = React.useCallback(async () => {
+    if (sortedCustomers.length === 0) {
+      toast.error("No customers available to export.");
+      return;
+    }
+    setIsExporting(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      exportCustomersToCsv(sortedCustomers);
+      toast.success(
+        `Successfully exported ${sortedCustomers.length} customer${
+          sortedCustomers.length === 1 ? "" : "s"
+        } to CSV.`
+      );
+    } catch {
+      toast.error("Failed to export customers to CSV. Please try again.");
+    } finally {
+      setIsExporting(false);
+    }
+  }, [sortedCustomers]);
 
   const paginatedResult = React.useMemo(
     () => paginateCustomers(sortedCustomers, currentPage, pageSize),
@@ -475,6 +499,8 @@ export function CustomerTable() {
         totalCount={isQueryError ? 0 : customers.length}
         onAddClick={openAddDialog}
         onFilterToggle={handleFilterToggle}
+        onExportClick={handleExportCsv}
+        isExporting={isExporting}
       />
 
       {/* Active filter badges */}
