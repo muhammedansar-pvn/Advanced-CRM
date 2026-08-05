@@ -2,6 +2,7 @@
 
 import { Bell, Menu, Search, User } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "./theme-toggle";
 
 interface NavbarProps {
   onMenuClick: () => void;
@@ -42,8 +43,10 @@ export function Navbar({ onMenuClick }: NavbarProps) {
         </div>
       </div>
 
-      {/* Right: notifications + user */}
+      {/* Right: theme toggle + notifications + user */}
       <div className="flex items-center gap-3">
+        <ThemeToggle />
+
         <button
           className="relative flex h-9 w-9 items-center justify-center rounded-lg border hover:bg-accent hover:text-accent-foreground transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           aria-label="View notifications (1 unread)"
