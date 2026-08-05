@@ -24,9 +24,9 @@ export default function ReportsPage() {
   ];
 
   const topPerformers = [
-    { name: "John Doe", deals: 14, revenue: "$215,000", winRate: "68%" },
-    { name: "Sarah Smith", deals: 11, revenue: "$180,000", winRate: "62%" },
-    { name: "Alex Johnson", deals: 9, revenue: "$155,000", winRate: "55%" },
+    { name: "John Doe", deals: 14, revenue: "₹2,15,000", winRate: "68%" },
+    { name: "Sarah Smith", deals: 11, revenue: "₹1,80,000", winRate: "62%" },
+    { name: "Alex Johnson", deals: 9, revenue: "₹1,55,000", winRate: "55%" },
   ];
 
   return (
@@ -53,7 +53,7 @@ export default function ReportsPage() {
               <Target className="h-4 w-4 text-emerald-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">$550,000</div>
+              <div className="text-2xl font-bold">₹5,50,000</div>
               <div className="flex items-center space-x-1 mt-1 text-xs text-emerald-500">
                 <ArrowUpRight className="h-3.5 w-3.5" />
                 <span>82% of target achieved</span>
@@ -127,10 +127,10 @@ export default function ReportsPage() {
             </CardHeader>
             <CardContent className="space-y-6">
               {[
-                { month: "May 2026", amount: "$120,000", pct: 60 },
-                { month: "Jun 2026", amount: "$165,000", pct: 78 },
-                { month: "Jul 2026", amount: "$190,000", pct: 90 },
-                { month: "Aug 2026 (P)", amount: "$210,000", pct: 95 },
+                { month: "May 2026", amount: "₹1,20,000", pct: 60 },
+                { month: "Jun 2026", amount: "₹1,65,000", pct: 78 },
+                { month: "Jul 2026", amount: "₹1,90,000", pct: 90 },
+                { month: "Aug 2026 (P)", amount: "₹2,10,000", pct: 95 },
               ].map((m, idx) => (
                 <div key={idx} className="space-y-2">
                   <div className="flex justify-between items-center text-sm font-medium">

@@ -8,7 +8,7 @@ import { Deal, DealStage } from "@/types/deals";
 import { DealFormDialog } from "@/components/deals/DealFormDialog";
 import { toast } from "sonner";
 import {
-  DollarSign,
+  IndianRupee,
   Plus,
   Search,
   Building2,
@@ -95,10 +95,10 @@ export default function DealsPage() {
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 Total Pipeline Value
               </CardTitle>
-              <DollarSign className="h-4 w-4 text-blue-500" />
+              <IndianRupee className="h-4 w-4 text-blue-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">${totalPipeline.toLocaleString("en-US")}</div>
+              <div className="text-2xl font-bold">₹{totalPipeline.toLocaleString("en-IN")}</div>
               <p className="text-xs text-muted-foreground mt-1">Across all active & won deals</p>
             </CardContent>
           </Card>
@@ -112,7 +112,7 @@ export default function DealsPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-                ${wonValue.toLocaleString("en-US")}
+                ₹{wonValue.toLocaleString("en-IN")}
               </div>
               <p className="text-xs text-muted-foreground mt-1">Realized revenue to date</p>
             </CardContent>
@@ -189,7 +189,7 @@ export default function DealsPage() {
                     <span className="text-xs text-muted-foreground font-medium">({stageDeals.length})</span>
                   </div>
                   <span className="text-xs font-bold text-muted-foreground">
-                    ${stageTotal.toLocaleString("en-US")}
+                    ₹{stageTotal.toLocaleString("en-IN")}
                   </span>
                 </div>
 
@@ -205,7 +205,7 @@ export default function DealsPage() {
                           <div className="flex justify-between items-start">
                             <h3 className="font-semibold text-sm line-clamp-1">{deal.title}</h3>
                             <span className="text-sm font-bold text-primary">
-                              ${deal.value.toLocaleString("en-US")}
+                              ₹{deal.value.toLocaleString("en-IN")}
                             </span>
                           </div>
 

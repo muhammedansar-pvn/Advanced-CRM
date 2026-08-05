@@ -103,7 +103,7 @@ export function DealFormDialog({ isOpen, onClose, onSubmit }: DealFormDialogProp
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-semibold mb-1 text-foreground">
-                Deal Value ($) *
+                Deal Value (₹) *
               </label>
               <input
                 type="number"
